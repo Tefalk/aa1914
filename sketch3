@@ -1,0 +1,120 @@
+// An Array of Bubble objects
+var bubbles;
+// A Table object
+var table;
+
+function preload() {
+  // table = loadTable("../travel2.csv", "header");
+	table = loadTable("../travel3.csv", "header");
+}
+
+function setup() {
+	// createCanvas(480, 270);
+	createCanvas(1920, 1080);
+	background(255, 0, 200);
+	// translate(100, 100);
+	// translate(width/2, height/2);
+  loadData();
+}
+
+function draw() {
+  // background(255);
+	translate(width/2, height/2);
+  // Display all bubbles
+  for (var i = 0; i < bubbles.length; i++) {
+    bubbles[i].display();
+    bubbles[i].rollover(mouseX, mouseY);
+  }
+
+}
+
+function loadData() {
+  // Load CSV file into a Table object
+  // "header" option indicates the file has a header row
+
+  // The size of the array of Bubble objects is determined by the total number of rows in the CSV
+  bubbles = [];
+
+  // You can access iterate over all the rows in a table
+  for (var i = 0; i < table.getRowCount(); i++) {
+    var row = table.getRow(i);
+    // You can access the fields via their column name (or index)
+		var port = row.get("port");
+    var x = row.get(1);
+    var y = row.get(2);
+		var n = row.get("visited");
+    var d = row.get(4);
+		// mouseover workaround
+		var mX = row.get(5);
+		var mY = row.get(6);
+		var date = row.get(7);
+
+		// adding mX and mY
+
+		// this is the one that was actually printing
+		// print("port = ", port, "x = ", x, "y = ", y, "mX = ", mX, "mY = ", mY, date);
+
+    // Make a Bubble object out of the data read (added mX, mY)
+    bubbles[i] = new Bubble(port, x, y, n, d, mX, mY, date);
+		// leave here for future debug
+		// print(bubbles[i]);
+  }
+}
+
+// function Bubble(port, x, y, visited, diameter) {
+function Bubble(port, x, y, visited, diameter, mX, mY, date) {
+	this.port = port;
+  this.x = Number(x);
+  this.y = Number(y);
+	this.visited = visited;
+  this.diameter = Number(diameter);
+	// mouseover workaround
+	this.mX = Number(mX);
+	this.mY = Number(mY);
+	this.date = date;
+  this.over = false;
+
+
+  // Checking if mouse is over the Bubble
+  this.rollover = function(px, py) {
+    // var d = dist(px, py, this.x, this.y);
+		var d = dist(px, py, this.mX, this.mY);
+    if (d < diameter) {
+      this.over = true;
+    } else {
+      this.over = false;
+    }
+  }
+	// Display the Bubble
+		// translate(width/2, height/2);
+  	this.display = function() {
+    stroke(0);
+    strokeWeight(2);
+    noFill();
+    ellipse(this.x, this.y, this.diameter, this.diameter);
+		if (this.over) {
+			textAlign(CENTER);
+			noStroke();
+			fill(0);
+			text(this.port, this.x, this.y + this.diameter/2 + 20);
+			// doesn't clear the area, still overwrites the prior entry
+			// the problem seems to be that it happens every draw cycle
+			text("see console for trip data", 100, 100);
+
+			// print(this.port, this.date);
+		}
+  }
+}
+function mouseClicked(){
+	// translate(width/2, height/2);
+	print("mouseX = " + mouseX, "mouseY = "+ mouseY);
+	for (var i = 0; i < bubbles.length; i++)
+	{
+		var nowX = Number(mouseX);
+		var nowY = Number(mouseY);
+		var t = dist (nowX, nowY, bubbles[i].mX, bubbles[i].mY);
+		if (t < bubbles[i].diameter) {
+		print(bubbles[i].visited, bubbles[i].date);
+		}
+	}
+}
