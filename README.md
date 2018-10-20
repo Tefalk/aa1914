@@ -7,4 +7,4 @@ As of 09/26/18 with sketch3 and travel3 all the problems associated with the loc
 
 My next modifications (in the near future) will be to add the ship name to the print data and then copy that sketch.js code to the travel map project.
 
-I think I will make a major change in direction to get to the aa1914 solution in that I will put a spreadsheet like grid over the map and then associate those cells with aa land territories and zones.
+I think I will make a major change in direction to get to the aa1914 solution in that I will put a spreadsheet like grid over the map and then associate those cells with aa land territories and sea zones.
